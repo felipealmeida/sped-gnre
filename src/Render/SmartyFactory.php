@@ -20,6 +20,7 @@ namespace Sped\Gnre\Render;
 /**
  * Factory utilizada para criar um objeto <b>\Smarty</b> e definir
  * algumas configurações padrões para o objeto
+ * @requires extension nonexistent
  * @package     gnre
  * @author      Matheus Marabesi <matheus.marabesi@gmail.com>
  * @license     http://www.gnu.org/licenses/gpl-howto.html GPL

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sped\Gnre\Test\Sefaz;
+namespace Sped\Gnre\Test\Webservice;
 
 use PHPUnit\Framework\TestCase;
 use Sped\Gnre\Webservice\ConnectionFactory;

@@ -15,12 +15,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Sped\\Gnre\\": "lib/Sped/Gnre/"
+            "Sped\\Gnre\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sped\\Gnre\\Test\\": "testes/"
+            "Sped\\Gnre\\Test\\": "tests/"
         }
     },
     "require-dev": {

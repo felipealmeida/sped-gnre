@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Sped\Gnre\Render\Html;
 
 /**
+ * @requires extension nonexistent
  * @covers \Sped\Gnre\Render\Html
  */
 class HtmlTest extends TestCase

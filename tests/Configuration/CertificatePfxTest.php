@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers Sped\Gnre\Configuration\CertificatePfx
  */
-class TestCertificatePfx extends TestCase
+class CertificatePfxTest extends TestCase
 {
 
     public function testPassarAoCriarChavePrivadaApartirDoCertificado()
