@@ -31,7 +31,7 @@
   </coverage>
   <testsuites>
     <testsuite name="GNREPHP">
-      <directory suffix="Test.php">./testes</directory>
+      <directory suffix="Test.php">./tests</directory>
     </testsuite>
   </testsuites>
 </phpunit>

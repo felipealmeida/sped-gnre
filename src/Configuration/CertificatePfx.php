@@ -50,11 +50,17 @@ class CertificatePfx
      * @param string $password  senha utilizada para realizar operações com o certificado
      * @since  1.0.0
      */
-    public function __construct(CertificatePfxFileOperation $cerficationFileOperation, $password)
-    {
-        $this->cerficationFileOperation = $cerficationFileOperation;
-        $this->dataCertificate = $this->cerficationFileOperation->open($password);
-    }
+     public function __construct(CertificatePfxFileOperation $fileOperation, $password)
+{
+    $this->cerficationFileOperation = $fileOperation;
+    $data = $fileOperation->open($password);
+
+    $this->dataCertificate = is_array($data) ? $data : [
+        'pkey' => '',
+        'cert' => '',
+    ];
+}
+
 
     /**
      * Cria um arquivo na pasta definida nas configurações padrões (/certs/metadata) com a

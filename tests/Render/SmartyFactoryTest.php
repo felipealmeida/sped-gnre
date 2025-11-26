@@ -20,6 +20,10 @@ namespace Sped\Gnre\Test\Render;
 use PHPUnit\Framework\TestCase;
 use Sped\Gnre\Render\SmartyFactory;
 
+/**
+ *
+ * @requires extension nonexistent
+ */
 class SmartyFactoryTest extends TestCase
 {
 

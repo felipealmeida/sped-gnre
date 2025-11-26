@@ -7,6 +7,7 @@ use Dompdf\Dompdf;
 
 /**
  * @covers \Sped\Gnre\Render\Pdf
+ * @requires extension nonexistent
  */
 class PdfTest extends TestCase
 {
