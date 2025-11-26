@@ -5,3 +5,4 @@ coverage/
 local/
 nbproject
 .phpunit.result.cache
+composer.lock
