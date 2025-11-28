@@ -59,12 +59,16 @@ class Connection
         $this->curlOptions = array(
             CURLOPT_PORT => 443,
             CURLOPT_VERBOSE => 1,
-            CURLOPT_HEADER => 1,
-            CURLOPT_SSLVERSION => 3,
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
-            CURLOPT_SSLCERT => $setup->getCertificatePemFile(),
-            CURLOPT_SSLKEY => $setup->getPrivateKey(),
+            CURLOPT_HEADER => 0,
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_MAX_DEFAULT,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_SSL_VERIFYPEER => 1,
+            CURLOPT_CAINFO => '/etc/ssl/certs/ca-certificates.crt',
+            CURLOPT_SSLCERT => $setup->getPfxPath(),
+            CURLOPT_SSLCERTTYPE => 'P12',
+            CURLOPT_SSLKEYPASSWD => $setup->getCertificatePassword(),
+            CURLOPT_CONNECTTIMEOUT => 30,
+            CURLOPT_TIMEOUT => 60,
             CURLOPT_POST => 1,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_POSTFIELDS => $data,
@@ -136,9 +140,7 @@ class Connection
         curl_setopt_array($curl, $this->curlOptions);
         $ret = curl_exec($curl);
 
-        $n = strlen($ret);
-        $x = stripos($ret, "<");
-        $xml = substr($ret, $x, $n - $x);
+        $xml = $ret;
 
         if ($this->setup->getDebug()) {
             print_r(curl_getinfo($curl));
