@@ -124,22 +124,16 @@ abstract class Setup
     abstract public function getProxyPass();
 
     /**
-     * Método que retorna o caminho e o nome do arquivo privado extraido do certificado por exemplo
-     * /var/www/chave_privada.pem
+     * Retorna o caminho completo para o arquivo de certificado digital
+     * no formato PFX que será utilizado na comunicação com o webservice
+     * da SEFAZ. Deve incluir o diretório e o nome do arquivo, por exemplo:
+     * /var/www/certificados/empresa123.pfx
+     *
      * @abstract
-     * @since   1.0.0
+     * @since   1.1.0
      * @return  string
      */
-    abstract public function getPrivateKey();
-
-    /**
-     * Método que retorna o caminho e o nome do arquivo extraido do certificado por exemplo
-     * /var/www/certificado_pem.pem
-     * @abstract
-     * @since   1.0.0
-     * @return  string
-     */
-    abstract public function getCertificatePemFile();
+    abstract public function getPfxPath();
 
     /**
      * Método utilizado para retornar o modo de debug
