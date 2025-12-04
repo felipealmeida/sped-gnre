@@ -6,7 +6,7 @@ use Sped\Gnre\Builder\GNREXML;
 use Sped\Gnre\Configuration\Setup;
 
 use NFePHP\Common\Certificate;
-use NFePHP\Common\Signature\Signer;
+use NFePHP\Common\Signer;
 use NFePHP\Common\Soap\SoapCurl;
 
 class Tools
