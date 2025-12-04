@@ -10,7 +10,7 @@ class GNREXML
     {
         // TLote_GNRE is the true GNRE XML root
         $xml = new \SimpleXMLElement(
-            '<TLote_GNRE xmlns="' . self::NS . '"></TLote_GNRE>'
+            '<TLote_GNRE xmlns="'.self::NS.'"></TLote_GNRE>'
         );
 
         // Cabeçalho
@@ -50,5 +50,24 @@ class GNREXML
         }
 
         return $xml->asXML();
+    }
+
+    public function envelop(string $signedXml): string
+    {
+        return <<<XML
+            <?xml version="1.0" encoding="UTF-8"?>
+            <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                <soap:Header/>
+                <soap:Body>
+                    <gnreLoteRecepcao xmlns="http://www.gnre.pe.gov.br">
+                        <gnreDadosMsg>
+                            <![CDATA[
+            $signedXml
+                            ]]>
+                        </gnreDadosMsg>
+                    </gnreLoteRecepcao>
+                </soap:Body>
+            </soap:Envelope>
+            XML;
     }
 }
