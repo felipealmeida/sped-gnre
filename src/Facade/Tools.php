@@ -55,8 +55,7 @@ class Tools
         $response = $soap->send(
             $operation,
             $url,
-            $action,
-            $soapXml
+            $action
         );
 
         return [
