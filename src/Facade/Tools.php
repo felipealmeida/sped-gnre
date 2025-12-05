@@ -81,7 +81,7 @@ class Tools
         $soapXml = $this->builder->envelop($signed);
 
         // 4. Monta URL
-        $url = $this->setup->getBaseUrl() . '/GnreLoteRecepcao';
+        $url = 'https://www.gnre.pe.gov.br/gnreWS/services/GnreLoteRecepcao';
 
         // 5. Envia via SoapCurl
         return $this->soapSend($soapXml, $url);
