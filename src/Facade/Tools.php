@@ -48,14 +48,15 @@ class Tools
     private function soapSend(string $soapXml, string $url): array
     {
         $soap = new SoapCurl($this->certificate);
-    
-        $operation = 'gnreLoteRecepcao';
-        $action    = 'http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao';
 
         $response = $soap->send(
-            $operation,
+            $soapXml,
             $url,
-            $action
+            [
+                'soapaction' => 'http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao',
+                'namespace'  => 'http://www.gnre.pe.gov.br',
+                'timeout'    => 30
+            ]
         );
 
         return [
