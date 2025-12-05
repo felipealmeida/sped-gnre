@@ -53,7 +53,7 @@ class Tools
             $soapXml,
             $url,
             [
-                'soapaction' => 'http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao',
+                'action' => 'http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao',
                 'timeout'    => 30
             ]
         );
