@@ -45,26 +45,37 @@ class Tools
     /**
      * Envia o SOAP usando SoapCurl do sped-common.
      */
-    private function soapSend(string $soapXml, string $url): array
-    {
-        $soap = new SoapCurl($this->certificate);
+     private function soapSend(string $soapXml, string $url): array
+     {
+         $ch = curl_init();
 
-        $response = $soap->send(
-            $soapXml,
-            $url,
-            [
-                'soapaction' => 'http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao',
-                'namespace'  => 'http://www.gnre.pe.gov.br',
-                'timeout'    => 30
-            ]
-        );
+         curl_setopt_array($ch, [
+             CURLOPT_URL            => $url,
+             CURLOPT_RETURNTRANSFER => true,
+             CURLOPT_POST           => true,
+             CURLOPT_POSTFIELDS     => $soapXml,
+             CURLOPT_HTTPHEADER     => [
+                 'Content-Type: text/xml; charset=utf-8',
+                 'SOAPAction: "http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao"',
+             ],
+             CURLOPT_SSLCERT        => $this->certificate->getCert($this->certificate),
+             CURLOPT_SSLKEY         => $this->certificate->getPrivateKey($this->certificate),
+             CURLOPT_SSL_VERIFYPEER => false,
+             CURLOPT_SSL_VERIFYHOST => 0,
+             CURLOPT_TIMEOUT        => 30,
+         ]);
 
-        return [
-            'http' => $soap->getLastHttpCode(),
-            'body' => $response,
-            'err'  => $soap->getLastCurlError(),
-        ];
-    }
+         $body = curl_exec($ch);
+         $err  = curl_error($ch);
+         $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+         curl_close($ch);
+
+         return [
+             'http' => $http,
+             'body' => $body,
+             'err'  => $err,
+         ];
+     }
 
     /**
      * API principal: monta, assina, envelopa e envia uma GNRE.
