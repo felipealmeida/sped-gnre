@@ -43,18 +43,29 @@ class Connection
      */
     private $setup;
 
+    private ?string $certPathOverride = null;
+    private ?string $keyPathOverride  = null;
+
     /**
-     * Inicia os parâmetros com o curl para se comunicar com o  webservice da SEFAZ.
-     * São setadas a URL de acesso o certificado que será usado e uma série de parâmetros
-     * para a header do curl e caso seja usado proxy esse método o adiciona
-     * @param  \Sped\Gnre\Configuration\Interfaces\Setup $setup
-     * @param  $headers  array
-     * @param  $data  string
-     * @since  1.0.0
+     * Inicia os parâmetros com o curl para se comunicar com o webservice da SEFAZ.
+     *
+     * @param  \Sped\Gnre\Configuration\Setup $setup
+     * @param  array  $headers
+     * @param  string $data
+     * @param  string|null $certPath  Caminho para certificado PEM (opcional)
+     * @param  string|null $keyPath   Caminho para chave privada PEM (opcional)
      */
-    public function __construct(Setup $setup, $headers, $data)
+    public function __construct(Setup $setup, $headers, $data, $certPath = null, $keyPath = null)
     {
         $this->setup = $setup;
+
+        if (!empty($certPath)) {
+	    $this->certPathOverride = $certPath;
+        }
+
+        if (!empty($keyPath)) {
+            $this->keyPathOverride  = $keyPath;
+        }
 
         $this->curlOptions = array(
             CURLOPT_PORT => 443,
@@ -64,9 +75,6 @@ class Connection
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => 1,
             CURLOPT_CAINFO => '/etc/ssl/certs/ca-certificates.crt',
-            CURLOPT_SSLCERT => $setup->getPfxPath(),
-            CURLOPT_SSLCERTTYPE => 'P12',
-            CURLOPT_SSLKEYPASSWD => $setup->getCertificatePassword(),
             CURLOPT_CONNECTTIMEOUT => 30,
             CURLOPT_TIMEOUT => 60,
             CURLOPT_POST => 1,
@@ -75,6 +83,18 @@ class Connection
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_VERBOSE => $setup->getDebug(),
         );
+
+        // Caso o ToolBuilder forneça PEMs, priorize eles
+        if ($this->certPathOverride && $this->keyPathOverride) {
+            $this->curlOptions[CURLOPT_SSLCERT]     = $this->certPathOverride;
+            $this->curlOptions[CURLOPT_SSLKEY]      = $this->keyPathOverride;
+            $this->curlOptions[CURLOPT_SSLCERTTYPE] = 'PEM';
+        } else {
+            // Caso contrário, usa o PFX como antes
+            $this->curlOptions[CURLOPT_SSLCERT]     = $setup->getPfxPath();
+            $this->curlOptions[CURLOPT_SSLCERTTYPE] = 'P12';
+            $this->curlOptions[CURLOPT_SSLKEYPASSWD] = $setup->getCertificatePassword();
+        }
 
         $ip = $setup->getProxyIp();
         $port = $setup->getProxyPort();
