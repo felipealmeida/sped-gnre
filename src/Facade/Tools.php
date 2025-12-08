@@ -45,37 +45,49 @@ class Tools
     /**
      * Envia o SOAP usando SoapCurl do sped-common.
      */
-     private function soapSend(string $soapXml, string $url): array
-     {
-         $ch = curl_init();
+    private function soapSend(string $soapXml, string $url): array
+    {
+        // 1. Criar PEMs temporários a partir do Certificate do sped-common
+        $certPem = tempnam(sys_get_temp_dir(), 'gnre_cert_') . '.pem';
+        $keyPem  = tempnam(sys_get_temp_dir(), 'gnre_key_')  . '.pem';
 
-         curl_setopt_array($ch, [
-             CURLOPT_URL            => $url,
-             CURLOPT_RETURNTRANSFER => true,
-             CURLOPT_POST           => true,
-             CURLOPT_POSTFIELDS     => $soapXml,
-             CURLOPT_HTTPHEADER     => [
-                 'Content-Type: text/xml; charset=utf-8',
-                 'SOAPAction: "http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao"',
-             ],
-             CURLOPT_SSLCERT => $this->certificate->publicKey,
-             CURLOPT_SSLKEY  => $this->certificate->privateKey,
-             CURLOPT_SSL_VERIFYPEER => false,
-             CURLOPT_SSL_VERIFYHOST => 0,
-             CURLOPT_TIMEOUT        => 30,
-         ]);
+        file_put_contents($certPem, $this->certificate->publicKey);
+        file_put_contents($keyPem,  $this->certificate->privateKey);
 
-         $body = curl_exec($ch);
-         $err  = curl_error($ch);
-         $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-         curl_close($ch);
+        // 2. Configurar curl corretamente usando arquivos, não strings
+        $ch = curl_init();
 
-         return [
-             'http' => $http,
-             'body' => $body,
-             'err'  => $err,
-         ];
-     }
+        curl_setopt_array($ch, [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => $soapXml,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: text/xml; charset=utf-8',
+                'SOAPAction: "http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao"',
+            ],
+
+            // CONFIGURAÇÃO SSL CORRETA
+            CURLOPT_SSLCERT        => $certPem,
+            CURLOPT_SSLKEY         => $keyPem,
+            CURLOPT_SSLCERTTYPE    => 'PEM',
+    
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_TIMEOUT        => 30,
+        ]);
+
+        $body = curl_exec($ch);
+        $err  = curl_error($ch);
+        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return [
+            'http' => $http,
+            'body' => $body,
+            'err'  => $err,
+        ];
+    }
 
     /**
      * API principal: monta, assina, envelopa e envia uma GNRE.
