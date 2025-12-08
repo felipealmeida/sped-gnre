@@ -64,7 +64,7 @@ class Tools
             CURLOPT_POSTFIELDS     => $soapXml,
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: text/xml; charset=utf-8',
-                'SOAPAction: "http://www.gnre.pe.gov.br/ws/GnreLoteRecepcao"',
+                'SOAPAction: "http://www.gnre.pe.gov.br/webservice/GnreLoteRecepcao/gnreRecepcaoLote"',
             ],
 
             // CONFIGURAÇÃO SSL CORRETA

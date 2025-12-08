@@ -59,13 +59,13 @@ class GNREXML
             <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
                 <soap:Header/>
                 <soap:Body>
-                    <gnreLoteRecepcao xmlns="http://www.gnre.pe.gov.br">
+                    <gnreRecepcaoLote xmlns="http://www.gnre.pe.gov.br">
                         <gnreDadosMsg>
                             <![CDATA[
             $signedXml
                             ]]>
                         </gnreDadosMsg>
-                    </gnreLoteRecepcao>
+                    </gnreRecepcaoLote>
                 </soap:Body>
             </soap:Envelope>
             XML;
