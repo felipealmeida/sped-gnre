@@ -53,10 +53,11 @@ class Tools
 
         $fullChain = $this->certificate->publicKey;
 
-        if (!empty($this->certificate->chain) && is_array($this->certificate->chain)) {
-            foreach ($this->certificate->chain as $intermediate) {
-                $fullChain .= "\n" . $intermediate;
-            }
+        // CertificationChain
+        $intermediates = $this->certificate->chainKeys->chain ?? [];
+
+        foreach ($intermediates as $pem) {
+            $fullChain .= "\n" . $pem;
         }
 
         file_put_contents($certPem, $fullChain);
