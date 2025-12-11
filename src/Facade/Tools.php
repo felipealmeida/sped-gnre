@@ -51,7 +51,15 @@ class Tools
         $certPem = tempnam(sys_get_temp_dir(), 'gnre_cert_') . '.pem';
         $keyPem  = tempnam(sys_get_temp_dir(), 'gnre_key_')  . '.pem';
 
-        file_put_contents($certPem, $this->certificate->publicKey);
+        $fullChain = $this->certificate->publicKey;
+
+        if (!empty($this->certificate->chain) && is_array($this->certificate->chain)) {
+            foreach ($this->certificate->chain as $intermediate) {
+                $fullChain .= "\n" . $intermediate;
+            }
+        }
+
+        file_put_contents($certPem, $fullChain);
         file_put_contents($keyPem,  $this->certificate->privateKey);
 
         // 2. Configurar curl corretamente usando arquivos, não strings
@@ -72,8 +80,8 @@ class Tools
             CURLOPT_SSLKEY         => $keyPem,
             CURLOPT_SSLCERTTYPE    => 'PEM',
     
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_TIMEOUT        => 30,
         ]);
 
