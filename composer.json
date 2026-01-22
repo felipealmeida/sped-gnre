@@ -4,7 +4,8 @@
     "license": ["GPL-3.0-or-later", "MIT"],
     "require": {
         "php": ">=7.3.0",
-        "dompdf/dompdf": "^2.0",
+        "dompdf/dompdf": "^3.0",
+        "sabberworm/php-css-parser": "^8.4",
         "laminas/laminas-servicemanager": "~3.0",
         "laminas/laminas-barcode": "^2.3",
         "smarty/smarty": "~3.1",
